@@ -1,0 +1,70 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE book PUBLIC "-//OASIS//DTD DocBook XML V4.4//EN"
+"http://www.oasis-open.org/docbook/xml/4.4/docbookx.dtd" [
+<!ENTITY % xinclude SYSTEM "../../../../target/doc-base/dtd/xinclude.mod">
+%xinclude;
+]>
+
+<chapter>
+	<title>Introduction</title>
+	
+	<section>
+		<title>Overview</title>
+		<para>
+			The UCIPLink is a standalone system integrating the charging system and the txe.
+		</para>
+	</section>
+
+	<section>
+		<title>Mappings of service class values to account link type id</title>
+		<para>
+			The uciplink supports mapping of service class ranges to groups that are used by the TXE business logic rules.
+			These mappings are enabled and configured in the uciplink.properties files and is returned back to TXE in the
+			getAccountInformation response accountLinkTypeId field.
+		</para>
+	</section>
+
+	<section>
+		<title>Mapping of account status</title>
+		<para>
+			The uciplink supports mapping of account status returned back to the client in the getAccountInformationResponse. This mapped
+			status is used by the TXE business rule to allow/disallow R2S and P2P requests.
+		</para>
+		<para>
+			The mapping uses the supervisionExpirtyDate and the serviceFeeExpirtyDate from the charging system. The supervisionExpriyDate
+			is the grace period when you can receive sms and calls whiel the serviceFeeExpiryDate is the date where the account is totally de-activated.
+		</para>
+		<para>
+			The account status is set according to the following:
+		</para><para>	
+A=supervisionExpiryDate=grace period when you can receive sms and calls
+		</para><para>	
+B=serviceFeeExpiryDate=the account is totally de-activated
+		</para><para>	
+
+1. Check if the account has been activated (and thus has been assigned an end
+date for service fee.
+		</para><para>	
+
+A=not set => AccountStatus.Pending (The account is pending, ie it might be a
+new account that has not been activate yet etc)
+		</para><para>	
+
+
+2. Check if the account is totally de-activated.
+		</para><para>	
+
+current time > A => AccountStatus.Disabled
+		</para><para>	
+
+3. Check if the account is in grace period where the user can receive SMS and
+calls or is not set yet.
+		</para><para>	
+
+current time > B or B is not set => AccountStatus.Suspended (The account has
+been suspended, and has limited services allowed)
+		
+		</para>
+	</section>
+
+</chapter>

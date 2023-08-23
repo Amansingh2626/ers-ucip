@@ -1,0 +1,17 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE book PUBLIC "-//OASIS//DTD DocBook XML V4.4//EN"
+"http://www.oasis-open.org/docbook/xml/4.4/docbookx.dtd" [
+<!ENTITY % xinclude SYSTEM "../../../target/doc-base/dtd/xinclude.mod">
+%xinclude;
+]>
+
+<book id="manual">
+	<title><?eval ${project.artifactId}?> version <?eval ${project.version}?></title>
+	
+	<xi:include href="parts/chap-introduction.xml" />		
+	<xi:include href="parts/chap-installation.xml" />
+	<xi:include href="parts/chap-upgrading.xml" />		
+	<xi:include href="parts/chap-configuration.xml" />		
+	<xi:include href="parts/chap-supported-features.xml" />
+	<xi:include href="parts/chap-developer-section.xml" />
+</book>

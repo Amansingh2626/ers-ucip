@@ -1,0 +1,99 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE book PUBLIC "-//OASIS//DTD DocBook XML V4.4//EN"
+"http://www.oasis-open.org/docbook/xml/4.4/docbookx.dtd" [
+<!ENTITY % xinclude SYSTEM "../../../../target/doc-base/dtd/xinclude.mod">
+%xinclude;
+]>
+
+<chapter>
+	<title>Developer section</title>
+
+	<para>
+		This chapter contains the technical details for this link component intended 
+		to be used by those who use this link for integration to the charging system.
+		Note that this link can communicate with the CS3Simulator and Charging system
+		only using the UCIP protocol.
+	</para>
+	<para>
+		This chapter is organized in sections and each section describes the necessary
+		details of service functions.
+	</para>
+	<section>
+		<title>Service getAccountInformation</title>
+		<para>
+			This service fetches the account information from the charging system if the
+			account exists in the charging system. The basic parameters it requires are
+			listed in the following table. 
+		</para>
+		<para>
+		<table border="1" >
+			<title>Basic parameters for getAccountInformation service</title>
+			<thead>
+				<tr>
+				<th>Parameter</th>
+				<th>Description</th>
+				</tr>
+			</thead>
+			<tbody>
+				<tr>
+				<td>principalId</td>
+				<td>The id of the subsystem consuming this service, such as ERS</td>
+				</tr>
+				<tr>
+				<td>account</td>
+				<td>The account type and id of the subscriber whose information is required to be fetched</td>
+				</tr>
+				<tr>
+				<td>routingInfo</td>
+				<td>Any routing instruction for the particular account</td>
+				</tr>
+				<tr>
+				<td>wantBalance</td>
+				<td>If the balance information is required along with the account information</td>
+				</tr>
+				<tr>
+				<td>reference</td>
+				<td>A reference id for charging system for this transaction</td>
+				</tr>
+			</tbody>
+		</table>
+		</para>
+		
+		<para>
+			Upon the successful completion of the transaction, the following information is returned back to the service consumer.
+		</para>
+		<para>
+		<table border="1" >
+			<title>Response information for getAccountInformation service</title>
+			<thead>
+				<tr>
+				<th>Parameter</th>
+				<th>Description</th>
+				</tr>
+			</thead>
+			<tbody>
+				<tr>
+				<td>prepared</td>
+				<td>Whether the operation was a prepare for a commit and if the operation is now prepared</td>
+				</tr>
+				<tr>
+				<td>accountData</td>
+				<td>As per documented in the AccountData class. Information related to the fields is described below</td>
+				</tr>
+				<tr>
+				<td>accountData.fields.serviceOffering_?</td>
+				<td>If there are service offerings enable for the account they will be present in the fields table. The key
+				is in the format of for example "serviceOffering_?" where '?' can be any digit from 0 to 31. The value is 
+				always "true" since the service offerings with a value "false" are not returned.</td>
+				</tr>
+				<tr>
+				<td>accountData.fields.activationStatusFlag</td>
+				<td>One of the flag from the account flags in the charging system. The value can be "true" or "false"</td>
+				</tr>				
+			</tbody>
+		</table>
+		</para>
+		
+	</section>	
+	
+</chapter>

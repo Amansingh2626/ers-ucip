@@ -1,0 +1,201 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE book PUBLIC "-//OASIS//DTD DocBook XML V4.4//EN"
+"http://www.oasis-open.org/docbook/xml/4.4/docbookx.dtd" [
+<!ENTITY % xinclude SYSTEM "../../../../target/doc-base/dtd/xinclude.mod">
+%xinclude;
+]>
+
+<chapter>
+	<title>Appendix - Configuration reference</title>
+
+	<para>
+		This chapter contains a reference of all configuration files
+		used by the UCIPLink System. All configuration files are
+		located in /opt/seamless/conf/uciplink.
+	</para>
+	<section>
+		<title>uciplink.properties</title>
+		<para>
+			This file configures the connection to the actual database.
+		</para>
+
+		<para>
+			Below is the default settings:
+		</para>
+		<programlisting><xi:include
+				href="../../../main/conf/uciplink.properties" parse="text" />
+		</programlisting>
+	</section>
+	<section>
+		<title>log4j.properties</title>
+		<para>
+			This file is the standard configuration file for log4j sub
+			system with the default configuration:
+		</para>
+		<programlisting><xi:include href="../../../main/conf/log4j.properties"
+				parse="text" />
+		</programlisting>
+
+		<para>
+			The debug logging can be enabled on two levels for the UCIPLink system.
+		</para>
+		
+		<para>
+		 The first level is to change log4j.logger.com.seamless and log4j.appender.MAINLOG.Threshold from INFO to DEBUG.
+		</para> 
+		
+		<para>
+		The second and highest level, i.e. DEBUG on everything, is to change log4j.rootCategory from WARN to DEBUG as well.
+		</para>
+			
+		<para>
+		The log files are stored at the location specified by log4j.appender.MAINLOG.File.
+		</para>
+		<para>
+			In addition to the log4j produced log files there is also a
+			log file called init.out that contains the actual startup of
+			the server. This file is located in
+			/var/seamless/log/uciplink/ as well.
+		</para>
+
+
+	</section>
+	
+		<section>
+		<title>Performance Monitoring (JETM)</title>
+		<para>
+	By default, JETM monitoring is turned on and also opens a monitoring http application (on port 48010) which is very useful.
+	To turn off JETM altogether (if performance degradation is suspected etc) then simply set autostart="false" below.
+	Also if the HTTP console is not desired, simply remove or commend away the plugin below. 		
+		</para>
+		<para>
+		The JETM configuration file is: jetm-config.xml
+		</para>
+		<para>
+		To monitor the statistics use a web browser with the following URL: http://host_URL:48010.
+		</para>
+		<para>
+		The performance points are set on web service call, ucip adapter request, and CS requests on round-robin level.
+		</para>
+		</section>
+	
+		<section>
+		<title>Load Balance Settings:</title>
+		<itemizedlist>
+		<listitem>
+			<para>Open /opt/seamless/conf/uciplink/uciplink.properties and add parameter ucip.serverURL (if not present). Set it to default CS Server value.</para>
+    	    <example>
+			<title>Example:</title>
+			<programlisting>
+			<![CDATA[			
+ 			ucip.serverURL=http://localhost:9080/Air
+			]]>
+			</programlisting>
+			</example>
+    		<para>Add another parameter  "ucip.serverSelectorConfig" (if not present) and set it to "/opt/seamless/conf/uciplink/ServerSelectorConfig.xml". 
+    		Should be done as shown below:</para>
+    		<example>
+			<title>Example:</title>
+			<programlisting>
+			<![CDATA[			
+ 			#RoundRobin Server Settings
+        	ucip.serverSelectorConfig=/opt/seamless/conf/uciplink/ServerSelectorConfig.xml
+			]]>
+			</programlisting>
+			</example>
+    		<para>Add another parameter "ucip.requestRetry" and set it to certain value. It should be positive value and for best results its value should 
+    		be more than or equal to number of Server URLS defined in "/opt/seamless/conf/uciplink/ServerSelectorConfig.xml". This parameter 
+    		signifies how many times a request should be retried if the ERS is not able to connect to CS3.</para>
+    		<example>
+			<title>Example:</title>
+			<programlisting>
+			<![CDATA[			
+ 			ucip.requestRetry=4
+			]]>
+			</programlisting>
+			</example>
+        </listitem>
+		<listitem><para>ServerSelectorConfig.xml contains various URLs to connect to CS3 service like</para>
+				  <para><ServerAddress>host_URL</ServerAddress></para>
+				  <para>  change the "host_URL" to the desired URL.(usually port numbers are changed).</para>
+				  <example>
+					<title>Example:</title>
+					<programlisting>
+					<![CDATA[			
+		 			<ServerAddress>http://localhost:9080/Air</ServerAddress>
+					]]>
+					</programlisting>
+				  </example>
+				  <para> You can have multiple URLs in the above file. Set the Url's as needed and save it.</para>
+				   <example>
+					<title>Example:</title>
+					<programlisting>
+					<![CDATA[			
+		 				<ServerAddress>http://localhost:9082/Air</ServerAddress>
+    					<ServerAddress>http://localhost:9083/Air</ServerAddress>
+   		 				<ServerAddress>http://localhost:9084/Air</ServerAddress>
+					]]>
+					</programlisting>
+				  </example>
+				  <para>Please make sure the serverURL parameter value you set in step 3 is present in this file as well (if you want to use it as one of the URLs for connecting to UCIP/CS)</para>
+				  </listitem>
+			<listitem><para> Restart uciplink.</para></listitem>
+	</itemizedlist>
+	</section>
+	
+	<section>
+		<title>Load Balance Testing:</title>
+		<itemizedlist>
+		<listitem>
+			<para>Repeat the steps mentioned above if not done already.</para>
+    		<para> Check if "/opt/seamless/test/cs3simulator" exists, if not open 
+    		http://nexus:8081/nexus/content/repositories/releases/com/seamless/simulators/cs3Simulator/ and get the latest version. 
+    		Unzip it at "/opt/seamless/test/"and rename as "cs3simulator".</para>
+    		<para>Open "/opt/seamless/test/cs3simulator/CS3SimulatorConfig.xml.</para>
+    		<example>
+			<title>The XML file will look like this :</title>
+			<programlisting>
+			<![CDATA[			
+ 			<ERS:CS3SimulatorConfig xmlns:ERS="http://www.seamless.se/ERSTestSuite"
+            	xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+            	xsi:schemaLocation="http://www.seamless.se/ERSTestSuite ../src/main/resources/xsd/CS3SimulatorConfig.xsd "
+              portNumber="9080" prefix="ucip" protocolVersion="3.4"
+            	defaultCurrency="INR">
+            	<ERS:SubscriberDatabase filename="SubscriberDatabase.xml" />
+        </ERS:CS3SimulatorConfig>
+			]]>
+			</programlisting>
+			</example>
+			<para></para>
+			<para> Change the portNumber="9080" to the desired port value and save the file. Then the XML will look 
+			like this (new portNumber is  9083):</para>
+						<example>
+					<title>Example:</title>
+					<programlisting>
+					<![CDATA[			
+		 			 <ERS:CS3SimulatorConfig xmlns:ERS="http://www.seamless.se/ERSTestSuite"
+            		xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+            		xsi:schemaLocation="http://www.seamless.se/ERSTestSuite ../src/main/resources/xsd/CS3SimulatorConfig.xsd "
+             		 portNumber="9083" prefix="ucip" protocolVersion="3.4"
+            		defaultCurrency="EUR">
+            		<ERS:SubscriberDatabase filename="SubscriberDatabase.xml" />
+        			</ERS:CS3SimulatorConfig>
+					]]>
+					</programlisting>
+			</example>
+				  <para> This is the port where CS3 test Server runs. You can change it to desired port value (like 9080,9081,9082) to run the CS3 test server.
+				   Make sure only one port value should be configured and  "protocolVersion" should be "3.4".</para>
+			
+        </listitem>
+		<listitem><para>You can repeat the steps from 5 to 8 by changing the portNumber (Make sure one of the portNumber should be contained 
+		in URL's defined in Step No. 6) and verify it still display the same results or not.</para>
+				  <para> You can kill the previous running port by using fuser -k "old port"/tcp at putty window. 
+				  This confirms CS3 test simulator running at new port only</para>
+		</listitem>
+		<listitem><para>You can also verify the round robin functionality by opening the 
+		    log file at "/var/seamless/log/uciplink/uciplink.cur"</para></listitem>
+	</itemizedlist>
+	</section>
+	
+	
+</chapter>

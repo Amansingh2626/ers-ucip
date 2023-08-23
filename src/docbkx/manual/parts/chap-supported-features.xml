@@ -1,0 +1,150 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE book PUBLIC "-//OASIS//DTD DocBook XML V4.4//EN"
+"http://www.oasis-open.org/docbook/xml/4.4/docbookx.dtd" [
+<!ENTITY % xinclude SYSTEM "../../../../target/doc-base/dtd/xinclude.mod">
+%xinclude;
+]>
+
+<chapter>
+	<title>Supported Features</title>
+	
+	<para>
+		ERS-UCIPLink implements ERS-Account-Link interface. Not all of the functions listed by the interface
+		are applicable to ERS-UCIPLink component. This chapter lists down the supported functions along with 
+		their parameters. 
+	</para>
+	<para>
+		There are four SOA interfaces exposed by the component these include:
+		<itemizedlist>
+		<listitem>
+		<para>
+		servicesURL=http://localhost:8010/UCIPLink/services
+		</para>
+		</listitem>
+		<listitem>
+		<para>
+		operationsURL=http://localhost:8010/UCIPLink/operations
+		</para>
+		</listitem>
+		<listitem>
+		<para>
+		managementURL=http://localhost:8010/UCIPLink/management
+		</para>
+		</listitem>
+		<listitem>
+		<para>
+		businesRuleURL=http://localhost:8010/UCIPLink/BusinessRuleLink
+		</para>
+		</listitem>
+		</itemizedlist> 
+	</para>
+	
+	<section>
+		<title>servicesURL</title>
+		<para>
+		<table border="1" >
+			<title>Service interface supported functions</title>
+			<thead>
+				<tr>
+				<th>Function</th>
+				<th>Description</th>
+				</tr>
+			</thead>
+			<tbody>
+				<tr>
+				<td>topup</td>
+				<td>Refills given user account</td>
+				</tr>
+				<tr>
+				<td>getLinkStatus</td>
+				<td>Pings charging system to check the connectivity</td>
+				</tr>
+				<tr>
+				<td>validateAccount</td>
+				<td>Validates given account for its existance</td>
+				</tr>
+				<tr>
+				<td>validateTopup</td>
+				<td>Not supported as this check is done by the TXE business rules.</td>
+				</tr>
+				<tr>
+				<td>performVASOperation</td>
+				<td>Different value added operation can be performed through
+				this function. These includes: GET_FRIEND_AND_FAMILY, GET_SERVICECLASS,
+				and CHANGE_SERVICECLASS</td>
+				</tr>
+			</tbody>
+		</table>
+		</para>
+	</section>
+	<section>
+		<title>operationsURL</title>
+		<para>
+		<table border="1" >
+			<title>Operations interface supported functions</title>
+			<thead>
+				<tr>
+				<th>Function</th>
+				<th>Description</th>
+				</tr>
+			</thead>
+			<tbody>
+				<tr>
+				<td>getAccountInformation</td>
+	<td>Retrieves account information including the current
+		balance of the account an optional mapped accountLinkTypeId and an account
+		status mapping using the charging system servicesionExpirtyDate and
+		serviceFeeExpirtyDate</td>
+				</tr>
+				<tr>
+				<td>makeAccountTransaction</td>
+				<td>Performs refill or update balance on given account
+				depending on the amount provided for the operation. If 
+				the amount is positive a refill is done on the account
+				and updateBalance operation is performed if the amount
+				is negative</td>
+				</tr>
+				<tr>
+				<td>getLinkStatus</td>
+				<td>Pings charging system to test the connectivity</td>
+				</tr>
+			</tbody>
+		</table>
+		</para>
+	</section>
+	<section>
+		<title>managementURL</title>
+		<para>
+			None of the functions are supported for this interface.
+		</para>
+	</section>
+	<section>
+		<title>businesRuleURL</title>
+		<para>
+		<table border="1" >
+			<title>Business rule interface supported functions</title>
+			<thead>
+				<tr>
+				<th>Function</th>
+				<th>Description</th>
+				</tr>
+			</thead>
+			<tbody>
+				<tr>
+				<td>validate</td>
+				<td></td>
+				</tr>
+				<tr>
+				<td>completed</td>
+				<td></td>
+				</tr>
+				<tr>
+				<td>failed</td>
+				<td></td>
+				</tr>
+			</tbody>
+		</table>
+		</para>
+	</section>
+	
+</chapter>

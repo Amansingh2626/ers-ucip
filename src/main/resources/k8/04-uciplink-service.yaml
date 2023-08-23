@@ -1,0 +1,15 @@
+apiVersion: v1
+kind: Service
+metadata:
+  labels:
+    app: ers-uciplink
+  name: ers-uciplink-service
+  namespace: ers
+spec:
+  ports:
+    - port: 8010
+      protocol: TCP
+      targetPort: 8010
+  selector:
+    app: ers-uciplink
+  type: ClusterIP

@@ -1,0 +1,120 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE book PUBLIC "-//OASIS//DTD DocBook XML V4.4//EN"
+"http://www.oasis-open.org/docbook/xml/4.4/docbookx.dtd" [
+<!ENTITY % xinclude SYSTEM "../../../../target/doc-base/dtd/xinclude.mod">
+%xinclude;
+]>
+
+<chapter>
+	<title>Installation</title>
+	
+	<para>
+		This chapter describes how to install the UCIPLink System.
+	</para>
+	
+	<section>
+		<title>Pre-installation requirements</title>
+		<para>
+			To install the application you will need the following dependencies:
+		</para>
+		<itemizedlist>
+			<listitem>
+				<para>Red Hat Enterprise Linux 4.x/5.x</para>
+			</listitem>
+			<listitem>
+				<para>Seamless base packages and dependencies (contrib-*, ers-base etc.)</para>
+			</listitem>
+			<listitem>
+				<para>MySQL Server Version 5.0</para>
+			</listitem>
+		</itemizedlist>
+	</section>
+	
+	<section>
+		<title>
+			Installing the rpm
+		</title>
+		<para>
+			To install the application, you just install the RPM using the
+			linux rpm command as root user.
+		</para>
+		<example>
+			<title>Example installing the RPM</title>
+			<programlisting>
+root@localhost:~> rpm -ivh ers-uciplink-1.0-noarch.rpm</programlisting>
+		</example>
+	</section>
+
+	<section>
+		<title>Configuring the UCIPLink System</title>
+		<para>
+			After installing the UCIPLink System rpm, you must configure. See the appendix at the end of the
+			document for details of the default uciplink.properties file that is located in /opt/seamless/conf/uciplink.
+		</para>
+		<para>
+			Typically settings customization is...?
+		</para>
+	</section>
+
+
+	<section>
+		<title>Starting/stopping the UCIPLink system
+		</title>
+		<para>
+			To be able to manage the application you need to have the
+			standard ERS environment set up. The easiest way is to source /opt/seamless/etc/env/env.conf in ~/.bashrc.
+		</para>
+		<para>
+			To manage the application you use the <command>uciplink</command> command
+			as user admin or the <command>/etc/init.d/uciplink</command> as user root..
+		</para>
+		<example>
+			<title>Example starting the UCIPLink system</title>
+			<programlisting>
+admin@localhost:~> uciplink start
+Starting uciplink...OK (PID: 22163)</programlisting>
+		</example>
+		<example>
+			<title>Example stopping the UCIPLink system</title>
+			<programlisting>
+admin@localhost:~> uciplink stop
+Stopping uciplink...OK</programlisting>
+		</example>
+		<example>
+			<title>Checking the UCIPLink system status</title>
+			<programlisting>
+admin@localhost:~> uciplink status
+uciplink is running (PID: 22163)</programlisting>
+		</example>
+		<example>
+			<title>Restarting the UCIPLink system</title>
+			<programlisting>
+admin@localhost:~> uciplink restart
+Stopping uciplink...OK
+Starting uciplink...OK (PID: 22200)</programlisting>
+		</example>
+
+	<section>
+		<title>Graceful shutdown</title>
+		<para>	
+			Graceful shutdown is supported with help of the Seamless ServiceManager component that integrates with the
+			StandardFlowControlHandler and SimpleServletServer components.
+		</para>
+		<para>
+			The ServiceManager is hooked up into the JVM at startup to be able to handle situations when the server is terminated 
+			externally, for example with SIGKILL signal on Unix.
+		</para>
+		<para>
+			At shutdown the server will reject any new incoming call to the StandardFlowControlHandler and send a message back to the client. To avoid loss of data
+			all ongoing tasks managed by the StandardFlowControlHandler will be timed out, and last the server will be ended.
+		</para>
+		<para>
+			There is a timeout value that can be configured in the application property file that generates a warning message in the log if not all resources was released within the given timeout,
+			that can be used to identify if there are unexpected long running tasks.
+		</para>
+	
+	</section>
+
+	</section>
+	
+</chapter>

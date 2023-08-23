@@ -1,0 +1,44 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: ers-uciplink
+  namespace: ers
+  labels:
+    app: ers-uciplink
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      app: ers-uciplink
+  template:
+    metadata:
+      labels:
+        app: ers-uciplink
+    spec:
+      containers:
+        - name: ers-uciplink
+          image: docker.dev.ts:5000/ers/ers-uciplink
+          imagePullPolicy: Always
+          resources:
+            limits:
+              cpu: '0.4'
+              memory: 600Mi
+            requests:
+              cpu: '0.2'
+              memory: 300Mi
+          ports:
+            - containerPort: 8010
+          volumeMounts:
+            - mountPath: /opt/seamless/conf/uciplink
+              name: vol-conf
+            - mountPath: /var/seamless/log/uciplink
+              name: vol-log
+      volumes:
+        - name: vol-conf
+          configMap:
+            name: uciplink-config
+        - name: vol-log
+          persistentVolumeClaim:
+            claimName: uciplink-log
+      imagePullSecrets:
+        - name: private-repo

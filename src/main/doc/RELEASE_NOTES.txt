@@ -1,0 +1,752 @@
+#
+# ERS UCIPLink release notes
+#
+# $Id$
+
+##[1.53.0] - 2023-04-13
+### Added
+    - Implemented connection keep-alive using getCapabilities call
+    - Updated log4j2.xml with metrics logging
+
+##[1.52.1] - 2023-03-31
+### Added
+    - Return Ucip native nodes in response of make account transaction response.
+    - Replaced customer check with meaningful property
+
+##[1.52.0] - 2023-03-31
+### Added
+    - Added support for deleteOffer and updateOffer
+
+##[1.51.0] - 2023-01-25
+### Fixed
+    - fix issue, allow GET_BALANCE_AND_DATE request only if validateTopupMethod property is GET_BALANCE_AND_DATE
+
+##[1.50.0] - 2022-11-23
+### Added
+    - Implemented native code logic for getBalance and getAccountDetails
+    - Add native code in mock response
+    - Native resultCode support for simulated responses
+    - Log rotation fixed
+
+##[1.49.2] - 2022-09-07
+### Added
+    - Added security fixes
+
+##[1.49.1] - 2022-08-02
+### Added
+    - Added support for Log4j2
+    - Add balance in response of validate topup
+
+##[1.49.0] - 2022-08-01
+   - Added configurable logic to populate ED2 with serial no for a voucher topup only.
+
+##[1.48.0] - 2022-06-21
+### Added
+    - Added support for fetching in server Ip or hostname is response
+    - Changed result code
+
+##[1.47.2] - 2022-05-03
+### Fixed
+    - implemented makeAccountTransactions operation
+    - generate refillProfileId based on productSku
+    - updated uciplib dependency version
+
+##[1.47.1] - 2022-04-21
+### Fixed
+    - Fixed ERSValidateTopupProcessor ArrayIndexOutOfBoundsException
+
+##[1.47.0] - 2022-04-15
+### Updated
+    - UpdateOfferExpiryFormat
+    - Resetting accumulators after failed Refill for UpdateAccumulatorsThenRefill call
+    - Improved exception handling.
+
+##[1.46.0] - 2022-03-02
+### Added
+    - native result code in case of timeout mapped with success
+    - Updated uciplib version
+    - Fixed connection read timeout and connection exception
+    - SBI-639: UCIP config updated to send ERSReference as originTransactionID in Refill request
+
+##[1.45.1] - 2022-02-27
+### Added
+    - Added feature to use input reference number as native reference number with config: use_input_reference_number_enabled
+
+##[1.45.0] - 2022-02-24
+### Added
+    - Voucher recharge for Djezzy
+    - Fetched OfferId information & service class
+    - Added reload4j and removed log4j v.1.2.16-17-18
+
+##[1.44.0] - 2021-12-23
+### Added
+    - Added feature to send a customOriginOperatorId in place of the regular originOperatorId with config: enableCustomOriginOperatorId
+    - Added Support for OfferValidity to be configured with MINUTES and SECONDS.
+    - Added Support to send the channel name for originHostName parameter with config: getBalanceAndDateSetChannelAsOriginHostName
+
+
+##[1.42.0] - 2021-10-26
+### Updated
+    - Updated GetBalanceAndDate to be able to send dedicatedAccountSelection parameters
+
+##[1.41.0] - 2021-08-03
+### Updated
+    - Updated uciplib version
+### Added
+    - Implemented Refill + UpdateOffer bundles
+    - Implemented Refill + Accumulator bundles
+    - Configs to control negotiatedCapabilities for GetBalanceAndDate and UpdateOffer calls
+    - Configs to control whether GetAccountDetails or GetBalanceAndDate is used for validation
+    - SecondaryNativeResultCode to extraParameters for return
+
+##[1.40.0] - 2021-02-26
+### Added
+    - Added file-based result code mapping for primary and secondary codes
+
+##[1.39.0] - 2020-12-17
+### Added
+    - Socket timeout exception seperated.
+    - Issue fix of externaldata1.
+    - Updated jar seamless-common dependency to 2.106.1 to update jetty version 9.
+    - Added timeout condition and txe will get success on the basis of configuration.
+    - Added native error code mapping feature.
+
+##[1.38.0] - 2020-11-28
+### Added
+    - ELK logging
+    - Added missed reference generator properties.TS - 17022
+
+##[1.37.0] - 2020-09-29
+### Added
+    -Added ersinstall command and implemented native reference generation.
+    -Added reference generator properties.TS - 17022
+
+## [1.36.2] - 2020-08-27
+### UPDATED
+	- UPDATED Dockerfile.
+	
+=====
+## [1.36.1] - 2020-08-22
+    Updated - pom.xml with fixed uciplib, where voucher-serial made non-mandatory in topup request 
+    		
+## [1.36.0] - 2020-08-19
+    Added - Changes for passing voucher serial to Charging System
+    		K8 files added
+
+## [1.35.0] - 2020-07-21
+	Added - TreeDefinedField,negotiatedCapabilites in Refill request for ucip version 5.0.
+	        Related configuration added,ExternalData3 enabled with implementation.
+
+## [1.34.0] - 2020-04-29
+	Updated - ERSTopupProcessor and UCIPLinkConfig for reading custom refillProfileId from config based on productSku.
+
+##[1.33.0] - 2019-08-19
+
+### UPDATED
+    - TS-14476 - Updated externalData parameters to thread-local to fix threading issues.
+    ADDED
+    - TS-14476 - Added option to reset externalData values received from txe.
+
+##[1.32.1] - 2019-07-24
+
+### UPDATED
+    - TS-14342 - Added flag to control fetching of subscriber segment.
+
+##[1.32.0] - 2019-07-05
+
+### UPDATED
+    - TS-14239 - UPDATED Uciplib version to one which supports HTTP persistent connections
+
+======
+
+##[1.31.2] - 2019-03-13
+
+### FIXED
+    - FIXED CS result code logging in end topup block
+
+======
+
+##[1.31.1] - 2019-02-27
+
+### ADDED
+    - Added CS error code in end topup block
+
+======
+
+##[1.31.0] - 2019-02-12
+
+### FIXED
+    - Duplicate logging for makeRequest operation, same log is also available in UCIPClient.
+    - Made configurable externalData2 as reference or other values and fixed
+### ADDED
+    - Added nativeReference in response fields
+    - Added support to simulate account information based on flag true/false value.
+
+======
+
+##[1.30.1] - 2018-12-13
+
+### FIXED
+    - Fixed ExternalData2 ers reference concurrency issue.
+======
+
+##[1.29.6] - 2018-05-21
+
+### UPDATED
+    - Made setting of externalData1 in request, more flexible by giving an option to set SENDER_MSISDN and RECEIVER_MSISDN explicitly.
+======
+
+##[1.29.5] - 01-01-2018
+
+### FIXED
+    - ExternalData1 and ExternalData2 population centralized in IUCIPAdaptor
+
+### FIXED
+    - default value in case when ExternalData1 and ExternalData2 values are not found anywhere.
+
+### UPDATED
+    - Improved Logging while populating all request params including externalData1 and externalData2
+
+======
+
+##[1.29.4] - 11-12-2017
+
+### FIXED
+    - ExternalData1 and ExternalData2 related issues in Ucip 3.4 and 4.0
+
+======
+
+##[1.29.3] - 04-12-2017
+
+### FIXED
+    - ExternalData1 and ExternalData2 related issues in Ucip 3.1
+
+### UPDATED
+    - Did some refactoring to get rid of duplicate code.
+
+======
+
+##[1.29.2] - (08/11/2017)
+
+### FIXED
+   -  Replaced extraFields and transactionType instance variable with local variable for refill and updateBalance in UCIP 3.4 version.
+
+======
+
+##[1.29.1] - (27/10/2017)
+
+### FIXED
+   - Release note's version 
+
+======
+
+##[1.29.0] - (27/10/2017)
+
+### FIXED
+   - externalData1 was not being set for some transaction which was causing transaction failure.
+
+### REMOVED
+   - Unnecessary method to set externalData1 and externalData2 have been removed.
+
+======
+
+##[1.28.0] - (14/10/2017)
+
+### FIXED
+   - receiverMSISDN in case of externalData1
+
+======
+
+ers-uciplink 1.27.1 (02/10/2017)
+
+  * Improvements - Added support to reverse native reference.
+  
+=======
+
+ers-uciplink 1.26.1 (08/09/2017)
+
+  * Improvements - Populated externalData2 with ERS reference for refill if enabled in configuration.
+  * Re-factor code as a fix of sonar cube recommendations.
+  
+=======
+
+ers-uciplink 1.26.0 (09/08/2017)
+
+  * PT-916 - changes merged for the solution of the PT with develop(log level improvement)
+  
+=======
+
+ers-uciplink 1.25.0 (09/08/2017)
+
+	Fixing a version issue
+
+======
+
+ers-uciplink 1.23.3 (13/07/2017)
+
+  * Bug - Fixed externalData1, externalData2 and transactionType for UCIPAdaptor31
+
+======
+
+ers-uciplink 1.23.2 (23/05/2017)
+
+  * Bug         - Fixed the external_data1 value issue for other bundles.
+  * Improvement - Made bundle Names configurable 
+======
+
+ers-uciplink 1.23.1 (10/05/2017)
+
+  * Re-factor code and added more logging to check the external data 1.
+  * Fixed NPE while loading offer's configurations.
+  * Default value in case refill SENDER_MSISDN is externalData1=null
+
+======
+
+ers-uciplink 1.23.0 (22/02/2017)
+
+  * TS-8244 - Added profile based externalData1 inclusion in request.
+
+======
+
+ers-uciplink 1.22.0 (31/01/2017)
+
+  * TS-7926 - added support for revers_toup in externalData1.
+
+======
+
+ers-uciplink 1.21.0 (01/11/2016)
+
+  * TS-7231 - Added support of senderMSISDN and receiverMSISDN in externalData1 and externalData2
+
+======
+
+ers-uciplink 1.20.0 (02/09/2016)
+
+  * TS-6992 - Added Support for COMBO BUNLDE for MTN-GHANA  
+
+======
+
+ers-uciplink 1.19.0 (01/09/2016)
+
+  * TS-6901 - MTN-GB FAF ID Update  
+
+======
+
+ers-uciplink 1.18.0 (26/08/2016)
+
+  * TS-6908 - Resolve 4G amount issue  
+
+======
+
+ers-uciplink 1.17.0 (19/08/2016)
+
+  * TS-6856 - Resolve P2P issue 
+
+======
+
+
+ers-uciplink 1.16.0 (10/08/2016)
+
+  * TS-6718 - Added extraFields in Response
+
+======
+
+ers-uciplink 1.15.0 (10/08/2016)
+
+  * TS-6718 - Refactored all code to keep Data Bundle changes Isolated.
+  * Fixed some issues with externalData1 values.
+  * Added Support for Multiple DAIds
+  * Added Suport to validate 4G from multiple channels.
+
+======
+
+ers-uciplink 1.14.0 (03/08/2016)
+
+  * TS-6718 - Added 4g Data bundle CR support
+
+======
+
+ers-uciplink 1.13.0 (26/07/2016)
+
+  * TS-6524 - Add Exclude Update offer call for DataBundles 
+  
+======
+
+ers-uciplink 1.12.0 (14/07/2016)
+
+  * TS-6950 - Correct Day format for Vas mapping file 
+  
+======
+
+ers-uciplink 1.11.0 (12/07/2016)
+
+  * TS-6950 - UpdateBalanceAndDate for Vas Mapping file 
+  
+======
+
+ers-uciplink 1.10.0 (29/06/2016)
+
+  * TS-6340 - UpdateBalanceAndDate for P2P for ucip 4.0  
+  
+======
+
+ers-uciplink 1.9.0 (23/06/2016)
+
+  * TS-6304 - UpdateBalanceAndDate and Update Offer request changes.  
+  
+======
+
+
+ers-uciplink 1.8.0 (18/05/2016)
+
+  * TS-6201 - Improvment in UpdateOffer and UpdateBalanceAndDate call , ucip version 4.0
+  
+======
+
+ers-uciplink 1.6.0 (15/04/2016)
+
+  * TS-5851 - Added UpdateOffer and UpdateBalanceAndDate in ucip verison 4.0
+  
+======
+
+ers-uciplink 1.5.0 (20/08/2015)
+
+  * TS-4364 - Fix currency transform issue for UCIP version 3.4
+  
+======
+
+ers-uciplink 1.4.0 (17/06/2015)
+
+  * TS-4005 - added logger for ers-uciplink
+  
+======
+
+ers-uciplink 1.3.4 (05/03/2015)
+
+  * TS-2904 - Configured externalData1, externalData2, originNodeType, 
+  	originOperatorID for MTN-GC
+  
+======
+
+ers-uciplink 1.3.3 (29/08/2014)
+
+  * PT-331 - Changed native reference length from 20 to 19 digits
+  	to resolve reverse transaction issue.
+  
+======
+  
+ers-uciplink 1.3.2 (21/08/2014)
+
+  * PT-331 - Included the host node id in NativeReference to prevent likely
+    duplicates in a multi-node setup
+  
+======  
+
+ers-uciplink 1.3.1 (NOT RELEASED)
+  * Change - changed method names and modified currency support 
+  * Change - Added config & code changes to transform currency between uciplink & CS 
+  
+======
+  
+ers-uciplink 1.2.2 (17/07/2014)
+
+ * PT-272 - Add accountLinkTypeId to extrafields as ASAccount don't have
+   this field now
+
+======
+
+ers-uciplink 1.2.1 (19/11/2013) 
+
+  * Improvement - Added support for validateSubscriberLocation flag in Refill request
+
+======
+
+ers-uciplink 1.1.2.1 (NOT RELEASED) 
+
+  * Version skipped after migrating to SVN
+
+======
+
+ers-uciplink 1.1.1.1 (08/10/2013) 
+
+  * Change - increased version of ersifextlink and ersifcommon
+
+======
+
+
+ers-uciplink 1.1.0.11 (07/05/2013) 
+
+  * Bug 11779 - For CG-MTN Reconcilliation TDR "senderBalanceValueBefore" and 
+    "senderBalanceValueAfter" should not change for failed transaction
+
+======
+
+ers-uciplink 1.1.0.10 (08/02/2013) 
+
+  * Bug 10474 - Wrong message when CS3/AIR server cannot be reached
+  
+======
+
+ers-uciplink 1.1.0.9 (22/01/2013) 
+
+  * Improvement - Added possibility to remove initial zeroes from MSISDN
+  * Change - Changed fetch_balance_after to true in default config
+
+======
+
+ers-uciplink 1.1.0.8 (16/08/2012) 
+
+  * Improvement - Add support for fetching dedicated account balance after 
+    making transaction  
+  * Improvement - Add support for setting extrafields from dedicated account 
+    balance before from refill response   
+  * Improvement - Add support for configuration value of UpdateBalanceAndDate.
+    dedicatedAccountUnitType 
+  * Bug 8255 - Wrong values shown in tdr files for receiverBalance (Before and 
+    After)  
+     
+    
+======
+
+ers-uciplink 1.1.0.7 (03/07/2012) 
+
+  * Improvement - Add support for supervisionPeriodExpiryFlag and 
+    serviceFeePeriodExpiryFlag and temporaryBlockedFlag
+    
+======
+
+ers-uciplink 1.1.0.6 (11/06/2012) 
+
+  * Improvement - Add fetch_balance_after configuration to fetch balance after 
+    makeAccountTransaction
+  * Improvement - Fixed UCIP 4.2 to not use 3.4 classes  
+  * Improvement - Change ERSValidateTopupProcessor to call getAccountDetails for 
+    checking receiver status
+  * Improvement - Update ERSGetAccountInformation to fetch balance from 
+    getAccountDetails response  
+  * Bug 7644 - Merge change of ers-uciplink 1.0.1.2 to trunk  
+  * Change - Updated uciplib to 1.55
+    
+======
+
+ers-uciplink 1.1.0.5 (26/04/2012)
+
+  * Improvement - Fixed UCIP 4.2 related parameter support issue
+  * Change - Updated uciplib to 1.54
+
+======
+
+ers-uciplink 1.1.0.4 (11/04/2012)
+
+  * Improvement - Added support of UCIP 4.2
+  * Change - Updated uciplib to 1.53
+  * Change - merged CR 6994 - [MTN-GH] Add Flag to Ucip from 1.0.1.3 
+    
+======
+
+ers-uciplink 1.1.0.3 (15/07/2011)
+
+  * Improvement - Use fields instead of extraFields in AccountTransactionResponse
+    (see ticket 3809). WARNING: This change makes UCIPLink incompatible with
+    Platform versions older than 4.3!
+  * Change - Updated ersifextlink to 1.23
+  * Change - Updated ersifcommon-utils to 1.19
+  * Change - Updated seamless-common to 2.21
+    
+======
+
+ers-uciplink 1.1.0.2 (20/06/2011)
+
+  * Bug 5827 - Supervision expiry date before missing in TDRs
+  * Change - Updated ersifextlink to 1.22
+  * Change - Updated ersifcommon-utils to 1.18
+  * Change - Updated seamless-common to 2.20
+  
+======
+
+ers-uciplink 1.1.0.1 (09/06/2011)
+
+  * Improvement - Added so it is possible to configure more flexible
+    rules for MSISDN formatting before passing on to UCIP.
+    Before it was only possible to cut all but the X last digits
+    by using msisdn_significant_digits.
+    Now it is also possible to use msisdn_strip_prefixes to strip
+    away the country code from the incomign E.164 formatted number.
+  * Improvement - Added support for capturing ServiceOffering and 
+    activationStatusFlag flags for the getAccountInformation service.
+    Updated doc book for the developer section regarding these new
+    flags.
+  * Bug 5600 - Fixed so that an inactive account (UCIP result code 126) 
+    does not cause getAccountInformation to fail, instead it will return 
+    successfull but set the account status to Pending in the response.
+    IMPORTANT! This could cause some transactions that previously failed 
+    to succeed, so if there is any business logic that depends on this 
+    (incorrect) behaviour it might allow transactions that should not 
+    succeed to go through.
+    Also added support for configurable per-product rules to enable 
+    validation of topups depending on product SKU.    
+  * Change - Updated uciplib to 1.49
+
+======
+
+ers-uciplink 1.0.0.14 (30/11/2010)
+
+  * Bug 4963 - Subscriber balance before and after not available for R2S 
+    reversal transaction.
+  * Bug 4964 - UCIPLink does not implement JETM performance measurement 
+    points towards the CS.
+  * Change - Updated ersifextlink to 1.19
+  * Change - Updated ersifcommon-utils to 1.14
+  * Change - Updated seamless-common to 2.15
+  
+======
+
+ers-uciplink 1.0-rc10 (11/11/2010)
+
+  * Improvement - Updated interface libraries for the HashMap fix for 
+    extra fields.
+  * Improvement - Added support for redeemVoucher in ucip 2.2.
+  * Bug 3204 - Response field for FAF_INFO containing the list is named 
+    "fafNumber"??
+  * Bug 4531 - topup doesn't work with ucip 2.2.
+  * Bug 4771 - DA information can only be fetched up to DA account ID 5.
+  * Bug 4802 - VAS fafNumber is set in response in addition to fafList to 
+    extra fields.
+  * Change - Updated ersifextlink to 1.18
+  * Change - Updated ersifcommon-utils to 1.13
+  * Change - Updated seamless-common to 2.13
+
+======
+
+ers-uciplink 1.0-rc9 (11/06/2010)
+
+  * Improvement 3856 - Reverse topup support
+  * Bug 3894 - Bonus in sms should show delta value, not total amount of DA
+    (requires cs3simulator 1.30 or higher)
+  * Change - Updated ersifextlink to 1.8
+  * Change - Updated uciplib to 1.47
+  
+======
+
+ers-uciplink 1.0-rc8 (28/05/2010)
+
+  * Bug 3740 - supervisionExpiryDate after topup is not possible to show on 
+    topup notification
+  * Bug 3811 - Account status mapping should use later day matching for 
+    supervisionExpiryDate serviceFeeExpiryDate
+
+======
+
+ers-uciplink 1.0-rc7 (24/05/2010)
+
+  * Improvement - Added debug printouts on in/out web service requests
+  * Bug 3679 - RefillProfileId should be read from request
+  * Improvement 3700 - UCIPLink should return Dedicated Account Values if
+    present
+  * Improvement 3701 - Add additional account information in the response to 
+    getAccountInformation  
+  * Change - Updated ersifextlink to 1.7
+  * Change - Updated seamless-common to 2.5
+  
+======
+
+ers-uciplink 1.0-rc6 (11/05/2010)
+
+  * Improvement 3628 - Service class range mapping to accountLinkTypeId
+  
+======
+
+ers-uciplink 1.0-rc5 (06/05/2010)
+
+  * Improvement - Fixed support for native references for tx to CS and also set the native reference back to the client.
+  * Improvement - Fixed so that FAF_INFO response will contain empty strings in case of no FAF numbers.
+  * Bug 3546 - FAF number not removed FAF list, but status in table 
+    'vasmgr_faf_status' is NotActive
+  * Task - Updated uciplib to 1.46
+  
+======
+
+ers-uciplink 1.0-rc4 (20/04/2010)
+
+  * Improvement - update to uciplib 1.45 to fix UpdateFAFList 
+  
+======
+
+ers-uciplink 1.0-rc3 (30/03/2010)
+
+  * Bug 3262 - CS3simulator not compatiable with UCIPLInk
+  * Bug 3274 - unable to delete a number from FAF list which was added very 
+    first time
+  * Bug 3277 - SCC not working correctly
+
+======
+
+ers-uciplink 1.0-rc2 (23/03/2010)
+
+  * Improvement - Added msisdn significant digit formatting for initiator on 
+    all processors
+  * Improvement - Added updateBalance for UCIP 2.2
+  * Improvement - Added balance enquiry for UCIP 2.2
+  * Improvement - Updated get account information processor to use latest 
+    AccountData methods
+  * Improvement - Added operator language conversion to ISO mapping.
+  * Improvement - Added first draft of ERSResetFAFProcessor for FAF_RESET 
+    operation id.
+  * Improvement - Added first migration to use fafList tag name instead of 
+    fafNumber when returning a list of faf numbers.
+  * Bug 3072 - Load balancer and simple fail over is 
+    missing in uciplink
+  * Task - Dependency ERS-utils 0.3 added
+  * Task - Updated ersifextlink to 1.1
+  * Task - Updated ersifextlink to 1.2
+  * Task - Updated seamless-common to 1.2
+
+======
+
+ers-uciplink 1.0-rc1 (16/02/2010)
+ 
+  * Bug 2345 - improvement for uciplink.properties
+  * Bug 2472 - P2P Topup doesn't work with ucip 3.4
+  * Bug 2613 - exception of Balance Query for subscriber when CS is down  
+  * Task - Updated to uciplib 1.40
+  * Task - Updated seamless-serverlib to 0.27
+  * Task - Updated seamless-clientlib to 0.27
+  * Task - Updated ersifextlink to 0.33
+
+======
+
+ers-uciplink 1.0-beta3 (20/11/2009)
+
+  * Bug 2438 - transfer money with decimal value is not working
+  * Bug 2473 - P2P Topup get excepiton when the sender doesn't have enough 
+    credit
+  * Task - Updated to uciplib 1.39 to fixe originTransacitonID to be string
+  * Task - Updated seamless-serverlib to 0.22
+  * Task - Updated seamless-clientlib to 0.21
+  * Task - Updated ersifextlink to 0.28
+
+======
+  
+ers-uciplink 1.0-beta2 (23/10/2009)
+
+
+  * Improvement - Added first draft of documentation structure
+  * Improvement - Added error handling and implementation of flow control reject 
+    method
+  * Improvement - Changed VAS processors to use the generic 
+    AccountVASOperationResponse object
+  * Improvement - Added support for ers external business rules
+  * Bug 2440 - able to change service class(SCC) to current service class
+  * Task - Aligned POM file with remaining projects
+  * Task - Updated to ersifextlink-0.27
+  * Task - Updated to ersifextlink 0.28-SNAPSHOT  
+
+======
+
+ers-uciplink 1.0-beta1 (02/10/2009)
+
+  * First release with VAS and refill support
+  * Added flow control to web services
+  
+
+  

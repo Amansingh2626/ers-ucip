@@ -1,0 +1,48 @@
+<Configuration status="INFO">
+    <Properties>
+        <Property name="LOG_PATTERN">%d{yyyy-MM-dd'T'HH:mm:ss.SSSZ} %p %m%n</Property>
+        <Property name="APP_LOG_ROOT">/var/seamless/log/uciplink</Property>
+        <Property name="APP_LOG_FILE_NAME">uciplink.log</Property>
+        <Property name="METRICS_LOG_FILE_NAME">metrics.log</Property>
+    </Properties>
+    <Appenders>
+        <Console name="LogToConsole" target="SYSTEM_OUT">
+            <PatternLayout pattern="%d{HH:mm:ss.SSS} [%t] %-5level %logger{36} - %msg%n"/>
+        </Console>
+        <RollingFile name="LogToFile" fileName="${APP_LOG_ROOT}/${APP_LOG_FILE_NAME}"
+                     filePattern="${APP_LOG_ROOT}/${APP_LOG_FILE_NAME}.%d{yyyy-MM-dd}"
+                     append="true">
+            <PatternLayout>
+                <Pattern>%d{ISO8601} %-5p [%c{1}] - %X{ersReference} %m%n</Pattern>
+            </PatternLayout>
+            <Policies>
+                <TimeBasedTriggeringPolicy/>
+            </Policies>
+        </RollingFile>
+        <RollingFile name="LogToMetrics" fileName="${APP_LOG_ROOT}/${METRICS_LOG_FILE_NAME}" filePattern="${APP_LOG_ROOT}/metrics.log.%d{yyyy-MM-dd}" append="true">
+            <PatternLayout>
+                <Pattern>%d{ISO8601} %-5p [%c{1}] - %X{ersReference} %m%n</Pattern>
+            </PatternLayout>
+            <Policies>
+                <TimeBasedTriggeringPolicy/>
+            </Policies>
+        </RollingFile>
+    </Appenders>
+    <Loggers>
+        <Logger name="com.seamless.ers.links.uciplink.UCIPLinkServicesImpl" level="debug" additivity="true">
+            <AppenderRef ref="LogToMetrics"/>
+        </Logger>
+        <Logger name="com.seamless.ers.links.uciplink.UCIPLinkOperationsImpl" level="debug" additivity="true">
+            <AppenderRef ref="LogToMetrics"/>
+        </Logger>
+        <Logger name="com.seamless" level="debug" additivity="false">
+            <AppenderRef ref="LogToFile"/>
+        </Logger>
+        <Logger name="org.springframework.boot" level="info" additivity="false">
+            <AppenderRef ref="LogToFile"/>
+        </Logger>
+        <Root level="info">
+            <AppenderRef ref="LogToFile"/>
+        </Root>
+    </Loggers>
+</Configuration>

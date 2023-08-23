@@ -1,0 +1,30 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE book PUBLIC "-//OASIS//DTD DocBook XML V4.4//EN"
+"http://www.oasis-open.org/docbook/xml/4.4/docbookx.dtd" [
+<!ENTITY % xinclude SYSTEM "../../../../target/doc-base/dtd/xinclude.mod">
+%xinclude;
+]>
+
+<chapter>
+	<title>Upgrading</title>
+	
+	<para>
+		This chapter describes how to upgrade the UCIPLink System.
+	</para>
+	
+	<section>
+		<title>Upgrading the RPM</title>
+		<para>
+			To upgrade the application you need to install a newer version of the RPM using
+			the linux rpm command.
+		</para>
+		<example>
+			<title>Example upgrade: rpm</title>
+			<programlisting>
+root@localhost:~> /etc/init.d/uciplink stop
+root@localhost:~> rpm -Uvh ers-uciplink-1.0-beta2-noarch.rpm</programlisting>
+		</example>
+	</section>
+	
+</chapter>
+	

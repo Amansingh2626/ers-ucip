@@ -1,0 +1,214 @@
+apiVersion: v1
+data:
+  ServerSelectorConfig.xml: "<?xml version=\"1.0\" encoding=\"UTF-8\"?>\r\n<ServerSelectorConfig
+    xmlns=\"http://www.example.org/ServerSelectorConfig\" xmlns:xsi=\"http://www.w3.org/2001/XMLSchema-instance\"
+    xsi:schemaLocation=\"http://www.example.org/ServerSelectorConfig ../../../main/resources/xsd/ServerSelectorConfig.xsd
+    \">\r\n<RoundRobinSelector blockTimeout=\"10000\" useIsAlive=\"false\">\r\n\t<ServerAddress>http://stewie3:9080/Air</ServerAddress>\r\n\t<ServerAddress>http://stewie3:9081/Air</ServerAddress>\r\n\t<ServerAddress>http://stewie3:9082/Air</ServerAddress>\r\n\t<ServerAddress>http://stewie3:9083/Air</ServerAddress>\r\n\t<ServerAddress>http://stewie3:9084/Air</ServerAddress>\r\n</RoundRobinSelector>\t\r\n</ServerSelectorConfig>\r\n"
+  jetm-config.xml: "<?xml version=\"1.0\" encoding=\"UTF-8\"?>\n<!DOCTYPE jetm-config
+    PUBLIC \"-// void.fm //DTD JETM Config 1.2//EN\"\n                             \"http://jetm.void.fm/dtd/jetm_config_1_2.dtd\">\n<!--
+    \ \n\tThe WIB application uses JETM for performance monitoring (http://jetm.void.fm)\n\tThis
+    can be used for real-time monitoring of response times etc but also to export
+    monitoring to RRDTool databases etc\n\t(see JETM documentation for more information)\n\t\n\tBy
+    default, JETM monitoring is turned on and also opens a monitoring http application
+    (on port 48010) which is very useful.\n\tTo turn off JETM altogether (if performance
+    degradation is suspected etc) then simply set autostart=\"false\" below.\n\tAlso
+    if the HTTP console is not desired, simply remove or commend away the plugin below.
+    \n-->\n<jetm-config autostart=\"true\">\n  <aggregator-chain>\n\n    <chain-element
+    class=\"etm.core.aggregation.BufferedTimedAggregator\">\n      <!-- Set aggregation
+    interval to 1 second -->\n      <property name=\"aggregationInterval\">1000</property>\n
+    \   </chain-element>\n\n    <chain-element class=\"etm.contrib.aggregation.log.Log4jAggregator\">\n
+    \     <!-- Set commons-logging log category -->\n      <property name=\"logName\">etm-result</property>\n
+    \   </chain-element>\n\n  </aggregator-chain>\n  <extension>\n     <plugin class=\"etm.contrib.console.HttpConsoleServerPlugin\">\n
+    \    \t<property name=\"listenPort\">48010</property>\n     \t<property name=\"workerSize\">2</property>\n
+    \    </plugin>\n  </extension>\n</jetm-config>"
+  log4j.properties: |
+    log4j.rootCategory=WARN, MAINLOG
+    log4j.logger.com.seamless=INFO
+
+    log4j.category.org.apache.cxf=ERROR
+
+    # set level to DEBUG to see log info about web service call to other components
+    log4j.category.se.seamless.ers.client.transport.ws=DEBUG
+
+    # dedicated level for SOAP messages
+    log4j.category.org.apache.cxf.interceptor.LoggingOutInterceptor=DEBUG
+    log4j.category.org.apache.cxf.interceptor.LoggingInInterceptor=DEBUG
+
+    log4j.appender.MAINLOG=org.apache.log4j.DailyRollingFileAppender
+    log4j.appender.MAINLOG.File=/var/seamless/log/uciplink/uciplink.log
+    log4j.appender.MAINLOG.Append=true
+    log4j.appender.MAINLOG.DatePattern='.'yyyy-MM-dd
+    log4j.appender.MAINLOG.layout=org.apache.log4j.PatternLayout
+    log4j.appender.MAINLOG.layout.ConversionPattern=%d{ISO8601} %-5p [%c{1}] - %X{ersReference} %m%n
+
+
+    log4j.logger.httpclient.wire.header=WARN
+    log4j.logger.httpclient.wire.content=WARN
+  rules.properties: "# The property file used for executing TXE business rule requests\r\n#
+    It maps the TXE rule ids to corresponding processors with additional\r\n# properties.\r\n#\r\n#
+    The format is:\r\n# <rule id defined in txe>.<command as validate, failed, and/or
+    completed>.classname=<processor class name>\r\n# <rule id defined in txe>.<command>.<key>=<value>\r\n#\r\n\r\n#
+    Matches sender and receiver service class. Enable/disable sender or receiver\r\n#
+    by removing corresponding property\r\n#\r\nEXTERNAL_ACCOUNT_CLASS_CONDITION.validate.classname=ServiceClassMatchProcessor\r\nEXTERNAL_ACCOUNT_CLASS_CONDITION.validate.sender_sc_regexp=^(.*)$\r\nEXTERNAL_ACCOUNT_CLASS_CONDITION.validate.receiver_sc_regexp=^(.*)$\r\n\r\n"
+  uciplink.properties: "# UCIPLink is a connection between UCIP server and TXE. It
+    implements\n# ERS Account Link interface.\n#\n# These are the default settings;
+    should work out of the box if every thing\n# is installed on the same machine.\n#
+    The URL for AIR is first candidate of change.\n#\n# $Id$\n#NODE ID\nnode_id=01\n#
+    UCIPLink publish URL's\nservicesURL=http://localhost:8010/UCIPLink/services\noperationsURL=http://localhost:8010/UCIPLink/operations\nmanagementURL=http://localhost:8010/UCIPLink/management\nbusinesRuleURL=http://localhost:8010/UCIPLink/BusinessRuleLink\n\n##
+    Msisdn significant digits formatting\n## should be configured according to the
+    charging system.\nmsisdn_significant=11\n\n# Msisdn prefixes that should be removed
+    if they are prefixed to the number\n# This is eg to remove local country code
+    or network codes \n# from the incoming E.164 formatted number.\n#\n#msisdn_strip_prefixes=46\n\n#
+    After formatting the number, stripping any prefixes etc \n# this will also add
+    a prefix to the number before passing on to UCIP.\n# This can eg be used to re-add
+    a zero before the network code if \n# CS requires it.\n#msisdn_add_prefix=0\n\n#
+    The response message formatting for dates set in extra fields.\nmessage.date_format=yyyy-MM-dd
+    HH:mm:ss\n\n# If enabled mapps the account status based on SupervisionExpiryDate
+    \n# and serviceFeeExpiryDate on exact time in milliseconds instead of \n# later
+    day matching/mapping.\naccount_status.exact_time_matching=false\n\n# Charging
+    system server address\nucip.serverURL=http://localhost:9080/Air\n\n# Added for
+    Round Robin. This is the number of times a particular CS request will retry if
+    any\n# CS server is down before dying\n# comment/uncomment depending upon Round
+    robin is required or not.\nucip.requestRetry=2\n\n# Set to true if a connection
+    should fail after a socket timeout. \nucip.disableRetriesAfterTimeout=false\n\n#
+    Added for Round Robin configuration\n# comment/uncomment depending upon Round
+    robin is required or not.\nucip.serverSelectorConfig=/opt/seamless/conf/uciplink/ServerSelectorConfig.xml\n\n#
+    ERS Refill profile ID\nrefillProfileID=PURCHASE_PRODUCT\n\n# Should self topup
+    be allowed\nallowSelfTopup=false\n\n# User name and password for authentication
+    on UCIP server\nucip.userName=user\nucip.password=user\n\n# UCIP version to use
+    for charging system communication \nucip.ucipVersion=3.1\n\n# UserAgent header
+    parameters\nucip.ucipClientId=UGw Server\nucip.ucipClientVersion=1.0\nucip.userAgentUcipVersion=3.3\n\n#
+    Charging system connection settings\nucip.replyTimeout=5000\nucip.connectionTimeout=5000\n#
+    Set to false to enable persistent connections\nucip.closeConnection=true\n# Set
+    to at least the max number of threads in flow control settings\nucip.persistentConnections.maxTotalConnections=100\nucip.persistentConnections.defaultMaxConnectionsPerHost=40\n\n#
+    Date format setting. False for simulator and true for real CS\nucip.fullISO8601=true\n\nucip.originHostName=TestClient\nucip.originNodeType=TEST\nucip.originTransactionID=5\nucip.profileId=1\nucip.serviceClassAction=Set\nucip.requestedOwner=1\nucip.selectedOption=1\nucip.chargingType=101\nucip.originOperatorID=100\nucip.subscriberNumberNAI=2\n\n#originNodeType
+    for UpdateBalanceAndDate and Refill based on productSKU\n#for P2P and R2S\n#ucip.originNodeType.<productSKU>=<value>\nucip.originNodeType.52=ERSR2S\nucip.originNodeType.72=ERSP2P\n\n#originNodeType
+    for UpdateBalanceAndDate and Refill based on ProfileID\n#for FAF \nucip.originNodeType.CUSTOM_OPERATION_FAF_ADD=ERSFAF\nucip.originNodeType.CUSTOM_OPERATION_FAF_REMOVE=ERSFAF\n\n#
+    originOperatorID add parameter to  refill request\n# originOperatorID_refill_enable=true
+    \noriginOperatorID_refill_enable=true\n\n# originOperatorID skip parameter to
+    \ refill request\n# originOperatorID_refill_enable=false\n\n# originOperatorID
+    skip parameter to updateBalance request\n# originOperatorID_updateBalance_enable=false\noriginOperatorID_updateBalance_enable=false\n\n#
+    originTransactionID \n# native reference in <Date.Time=13 digits>\n# native_reference_length_check=false
+    length remains 13\n# native_reference_length_check=true length should be 19\n#
+    native reference in <Date.Time=13 digits>+<NN>+<CCCCCC> format\n# where <NN> is
+    the node id and <CCCCCC> is a 6-digit sequence counter\nnative_reference_length_check=false\n\n#
+    Update Service Class settings\nucip.UpdateServiceClass.charge=true\nucip.UpdateServiceClass.chargingType=2\nucip.UpdateServiceClass.chargingIndicator=1\nucip.UpdateServiceClass.reservationCorrelation=5\n\n#
+    UpdateBalanceAndDate setting\nucip.UpdateBalanceAndDate.dedicatedAccountUnitType=1\n\n#
+    Test parameter. \"ucip\" prefix and false for simulator and no prefix and true\n#
+    for real CS\nucip.ucipMethodPrefix=\n\n# If set to true charging system gets a
+    ping for connectivity test. No connection\n# test is performed if it is set to
+    false\nucip.useFakedPing=false\n\n# If set to true, will not send getAccountDetails
+    API call to server\nucip.simulate_account_information=false\n\n# Operator specific
+    languages 1 using ISO-6391 for language code\nucip.operatorSpecificLanguage1=en\n\n#
+    Operator specific languages 2 using ISO-6391 for language code\nucip.operatorSpecificLanguage2=fr\n\n#
+    Operator specific languages 3 using ISO-6391 for language code\nucip.operatorSpecificLanguage3=en\n\n#
+    Operator specific languages 4 using ISO-6391 for language code\nucip.operatorSpecificLanguage4=en\n\n#
+    Flow control configuration\nflowcontrol.default.asynchronous=false\nflowcontrol.default.cooldown_time=10000\nflowcontrol.default.max_parallel_requests=40\n\n#
+    The default graceful shutdown time for stopping the server in milliseconds.\n#
+    In case a shutdown takes longer time, a warning message will be printed in the
+    log. \nservicemanager.shutdown_hooks=SIGHUP:timeout=60000\n\n# Mappings of service
+    class values to account link type id.\n# A link type id can use a list of values
+    or ranges.\n#\n# service_class_range.<LINK_TYPE_ID>.<index>.values=<value>,...\n#
+    service_class_range.<LINK_TYPE_ID>.<index>.range=<min>,<max>\n#\n# Example:\n#
+    service_class_range.NORMAL_PREPAID.1.range=70, 79\n# service_class_range.BULK_SMS.1.values=15\n#
+    service_class_range.LCR.1.values=60\n# service_class_range.CTS.1.values=5\n# service_class_range.INTERNET.1.range=10,
+    11\n\n# Extra fields names for dedicated accounts in refill information refill
+    value total\n# These names has to match the txe language mapping file as they
+    are set as\n# extra fields in the response message.\n# The comma separated list
+    are in ordered number from 1 to 5 and spaces are trimmed. \nrefill_response.refill_value_total.extra_fields_da_names=rvtDA1,
+    rvtDA2, rvtDA3, rvtDA4, rvtDA5\n\n# Sequenced extra fields to specify dedicated
+    accounts names and IDs\n# Those fields will match and add to the ones provided
+    in refill_response.refill_value_total.extra_fields_da_names.\n# They also can
+    have additional values not mentioned in refill_response.refill_value_total.extra_fields_da_names.\n#refill_response.1.da_name=rvtDA14\n#refill_response.1.da_id=14\n\n#refill_response.2.da_name=rvtDA19\n#refill_response.2.da_id=19\n\n#
+    Extra fields names for dedicated accounts in refill information refill value promotion\n#
+    These names has to match the txe language mapping file as they are set as\n# extra
+    fields in the response message.\n# The comma separated list are in ordered number
+    from 1 to 5 and spaces are trimmed. \nrefill_response.refill_value_promotion.extra_fields_da_names=rvpDA1,
+    rvpDA2, rvpDA3, rvpDA4, rvpDA5\n\n# Perform an extra call to the CS to fetch balance
+    before and after for\n# topup reversal in addition to the update balance and date
+    to the CS.\n#\nreverse_topup_want_balance=true\n\n# Defines product-specific settings\n#
+    - validate_topup_account - Call GetBalanaceAndDate for every validateTopup with
+    this product\n# - requires_active_account - In addition to calling GetBalanceAndDate
+    result should be checked \n#                             to verify that the topped
+    up account is active.\n#\n\ntopup_products.default.validate_topup_account=false\ntopup_products.default.requires_active_account=false\n\n#
+    Below is a sample config that requires active account for a regular topup\n# and
+    has a separate topup product that accepts an inactive account\n#topup_products.default.validate_topup_account=true\n#topup_products.default.requires_active_account=true\n#topup_products.TOPUP_FIRST_CALL.validate_topup_account=true\n#topup_products.TOPUP_FIRST_CALL.requires_active_account=false\n\n#
+    Perform an extra call to CS to fetch balance after for makeAccountTransaction
+    \nfetch_balance_after=true\n\n# To strip off leading zeros set the value greater
+    than 0.\n# Note that it will only strip zeros not any other digit.\n#strip_msisdn_zeros=2\n\n#
+    Send validateSubscriberLocation in Refill request (supported in UCIP 3.1, 3.4,
+    4.0, 4.2)\n# true -> <name>validateSubscriberLocation</name><value><boolean>1</boolean></value>\n#
+    false -> <name>validateSubscriberLocation</name><value><boolean>0</boolean></value>\n#
+    commented out -> no validateSubscriberLocation flag in request\n#validate_subscriber_location=true\n\n#
+    Set the following following properties to change currency code sent to CS\n# By
+    default no change is made.\n# One example to change any currency to XOF has to
+    be done as follows (used in Telecel BF)\n#ucip.transformCurrency.enabled=true\n#ucip.transformCurrency.code=XOF\n\n#
+    Set the following following properties to change faf indicator sent to CS\n# default
+    value is 1.\nucip.UpdateFaFList.faf_indicator=1\n\n\n\n########################################
+    DATA BUNDLE PROPERTIES ######################################\n\n# This property
+    basically enable the dataBundle feature, bydefault it should be false, and our
+    request\n# flow will go as normal.but if we turn it true, then the below property
+    must be necessary and mapping\n# file should be there. In case of false simple
+    refill will be called while in case of true, it call\n# UpdateBalanceAndDate and
+    after that updateOffer\n#\n#data_bundles.enabled=false\n#\n# If above property
+    will be false then this mappingFileName property has no use, but its above property\n#
+    true then it should be there and in our config we should have that mapping.properties
+    file.\n#\n#data_bundles.mappingFileName=vas_mapping.properties\n\n# This property
+    used to exclude updateOffer call in for DATA_BUNDLES , If we put this into null
+    , this\n# wont effect existing funtionality.\n#\n#data_bundles.exculde_update_offer_calls=\n\n################################
+    DATA BUNDLE CONFIGURATIONS ###########################################\ndata_bundles.enabled=false\ndata_bundles.name_list=COMBO_BUNDLE,DATA_BUNDLE,IDD_BUNDLE,SMS_BUNDLE\ndata_bundles.mappingFileName=vas_mapping.properties\ndata_bundles.exculde_update_offer_calls=\ndata_bundles.4g.enabled=false\ndata_bundles.4g.channels=ADC,HSS\n\n################################
+    EXTERNAL DATA CONFIGURATIONS #########################################\n\n################################################################\n#
+    \                       EXTERNAL DATA 1\n################################################################\n\n#externalData1
+    add parameter for UpdateBalanceAndDate and Refill\nexternalData1_enable=true\nprofile_based_externalData1_enable=true\n\n\n#externalData1
+    for UpdateBalanceAndDate and Refill based on productSKU\n#and transactionType
+    for P2P and R2S\n#keeping these fields empty means that MSISDN will be sent in
+    externalData1\nucip.externalData1.72.Credit=\nucip.externalData1.72.Debit=\nucip.externalData1.52.Credit=\n\n#Resets
+    externalData1 and externalData2 properties populated from txe if transaction is
+    of the listed profiles\n#lists are comma-separated\n#ucip.externalData1.override_extraparams.profiles=REVERSE_TOPUP\n#ucip.externalData2.override_extraparams.profiles=\n#
+    Default value in case refill SENDER_MSISDN is null\nucip.externalData1.default=123\n#externalData1
+    for UpdateBalanceAndDate based on ProfileID\n#and transactionType for FAF\n#keeping
+    these fields empty means that MSISDN will be sent in externalData1\nucip.externalData1.CUSTOM_OPERATION_FAF_ADD.Debit=\nucip.externalData1.CUSTOM_OPERATION_FAF_REMOVE.Debit=\n\n\n################################################################\n#
+    \                       EXTERNAL DATA 2\n################################################################\n\n\n#externalData2
+    add parameter for UpdateBalanceAndDate and Refill\nexternalData2_enable=true\nprofile_based_externalData2_enable=true\n#
+    If true then externalData2=ERS reference in refill call\nset_externalData2_as_ers_reference=false\n\n#externalData2
+    for UpdateBalanceAndDate and Refill based on productSKU\n#and transactionType
+    for P2P and R2S\n#ucip.externalData2.<productSKU>.<transactionType>=<value>\nucip.externalData2.52.Credit=R2S_REFILL\nucip.externalData2.72.Credit=P2P_REFILL\nucip.externalData2.72.Debit=P2P_DEDUCTION\n\n#externalData2
+    for UpdateBalanceAndDate based on ProfileID and transactionType for FAF\n\nucip.externalData2.CUSTOM_OPERATION_FAF_ADD.Debit=FAF_DEDUCTION\nucip.externalData2.CUSTOM_OPERATION_FAF_REMOVE.Debit=FAF_DEDUCTION\n\n##############################
+    END OF EXTERNAL DATA CONFIGURATIONS ###################################\n\n#enables
+    fetching of subscriber segment\nenableFetchSubscriberSegment=false\n\n\n##################
+    CUSTOM REFILL PROFILE-ID BASED ON PROUCT SKU ######################################\n#refill_profile_id_productsku=<PRODUCTSKU1>,<PRODUCTSKU2>,<PRODUCTSKU3>\nrefill_profile_id_productsku=REDEEM,REDEEM_DATA\n#refill_profile_id.<PRODUCTSKU1>=<PREFERRED_PROFILE_ID>\n#refill_profile_id.<PRODUCTSKU2>=<PREFERRED_PROFILE_ID>\nrefill_profile_id.REDEEM=10\nrefill_profile_id.REDEEM_DATA=14\n\n\n###################
+    TREE DEFINED FIELD SETTINGS ###########################################\npopulateResponseWithTreeDefinedFields=false\ntreeDefinedFieldsResponsePrefix="
+  vas_mapping.properties: "#This property file is used for VAS bundle offer.\n#For
+    VAS bundle , there is additional updateOffer() call to ucip.\n#UpdateOffer call
+    is responsible to update subscriber's offer for a particular data bundle.\n\n\n#List
+    of SKUs for which updateOffer will be called can be configured here.\n#SKUs will
+    be unique for each product.\n#UpdateOffer will only be called for the products
+    for which SKUs are present in the list.  \nupdateOfferSkuList=DB_D1,DB_D2,DB_D3,DB_M1,DB_M2,DB_M3,DB_M4,DB_M5,DB_M6,DB_M7,DB_W1,DB_W2,DB_W3,DB_U1,DB_U2,DB_U3,DB_Y1,DB_Y2,DB_L1,SMS_BUNDLE1,SMS_BUNDLE2,SMS_BUNDLE3,SMS_BUNDLE4,IDD_BUNDLE1,IDD_BUNDLE2,IDD_BUNDLE3\n\n\n#All
+    SKU which mentioned at above list , should have its detail like given below.\n#daIA
+    is unique id of that bundle\n#offerID is the offer Id which we are going to set
+    for that bundle\n#packageName is the name of the bundle.\n#amount is Total Amount\n#daAmountList
+    the amount which we need to set in daValue\n#mb total limit to be assigned for
+    particular package\n#validityType, you can provide validity in Days or Hours.
+    If we provide Days then in validity field 1 will be consider as day\n#but if we
+    configure it as hours then we have to provide starting hour and ending hour like
+    9pm-9am\n#validity refers to expiry data of that bundle. each digit corresponds
+    to day like 1=1day ,2=2day\n\n##DAILY BUNLDE\n\nproduct.DB_D1.daIDList=100,202\nproduct.DB_D1.offerID=20\nproduct.DB_D1.packageName=DAILY_1\nproduct.DB_D1.amount=0.5\nproduct.DB_D1.daAmountList=50,20\nproduct.DB_D1.mb=20\nproduct.DB_D1.validityList=1,1\nproduct.DB_D1.validity_type=DAYS\n\nproduct.DB_D2.daIDList=101,202\nproduct.DB_D2.offerID=21\nproduct.DB_D2.packageName=DAILY_2\nproduct.DB_D2.amount=1\nproduct.DB_D2.daAmountList=100,50\nproduct.DB_D2.mb=50\nproduct.DB_D2.validityList=1,1\nproduct.DB_D2.validity_type=DAYS\n\nproduct.DB_D3.daIDList=102,202\nproduct.DB_D3.offerID=22\nproduct.DB_D3.packageName=DAILY_3\nproduct.DB_D3.amount=2\nproduct.DB_D3.daAmountList=200,120\nproduct.DB_D3.mb=120\nproduct.DB_D3.validityList=1,1\nproduct.DB_D3.validity_type=DAYS\n\n##MONTHLY
+    BUNLDE\n\nproduct.DB_M1.daIDList=20,203\nproduct.DB_M1.offerID=14\nproduct.DB_M1.packageName=MONTHYLY_1\nproduct.DB_M1.amount=10\nproduct.DB_M1.daAmountList=1320,400\nproduct.DB_M1.mb=400\nproduct.DB_M1.validityList=30,7\nproduct.DB_M1.validity_type=DAYS\n\n\nproduct.DB_M2.daIDList=4,203\nproduct.DB_M2.offerID=15\nproduct.DB_M2.packageName=MONTHYLY_2\nproduct.DB_M2.amount=20\nproduct.DB_M2.daAmountList=2048,1024\nproduct.DB_M2.mb=1GB\nproduct.DB_M2.validityList=30,7\nproduct.DB_M2.validity_type=DAYS\n\n\nproduct.DB_M3.daIDList=6,203\nproduct.DB_M3.offerID=16\nproduct.DB_M3.packageName=MONTHYLY_3\nproduct.DB_M3.amount=40\nproduct.DB_M3.daAmountList=4096,2560\nproduct.DB_M3.mb=2.5GB\nproduct.DB_M3.validityList=30,7\nproduct.DB_M3.validity_type=DAYS\n\n\nproduct.DB_M4.daIDList=31,203\nproduct.DB_M4.offerID=17\nproduct.DB_M4.packageName=MONTHYLY_4\nproduct.DB_M4.amount=60\nproduct.DB_M4.daAmountList=6144,4096\nproduct.DB_M4.mb=4GB\nproduct.DB_M4.validityList=45,7\nproduct.DB_M4.validity_type=DAYS\n\n\nproduct.DB_M5.daIDList=32,203\nproduct.DB_M5.offerID=18\nproduct.DB_M5.packageName=MONTHYLY_5\nproduct.DB_M5.amount=80\nproduct.DB_M5.daAmountList=9216,6144\nproduct.DB_M5.mb=6GB\nproduct.DB_M5.validityList=45,7\nproduct.DB_M5.validity_type=DAYS\n\n\nproduct.DB_M6.daIDList=33,203\nproduct.DB_M6.offerID=19\nproduct.DB_M6.packageName=MONTHYLY_6\nproduct.DB_M6.amount=120\nproduct.DB_M6.daAmountList=12000,10240\nproduct.DB_M6.mb=10GB\nproduct.DB_M6.validityList=45,7\nproduct.DB_M6.validity_type=DAYS\n\n\nproduct.DB_M7.daIDList=39,203\nproduct.DB_M7.offerID=28\nproduct.DB_M7.packageName=MONTHYLY_7\nproduct.DB_M7.amount=399\nproduct.DB_M7.daAmountList=39900\nproduct.DB_M7.mb=200GB\nproduct.DB_M7.validityList=45,7\nproduct.DB_M7.validity_type=DAYS\n\n\n##
+    WEEKLY BUNDLE\n\nproduct.DB_W1.daIDList=3,203\nproduct.DB_W1.offerID=10\nproduct.DB_W1.packageName=WEEKLY_1\nproduct.DB_W1.amount=2\nproduct.DB_W1.daAmountList=198,60\nproduct.DB_W1.mb=60MB\nproduct.DB_W1.validityList=7,7\nproduct.DB_W1.validity_type=DAYS\n\nproduct.DB_W2.daIDList=18,203\nproduct.DB_W2.offerID=11\nproduct.DB_W2.packageName=WEEKLY_2\nproduct.DB_W2.amount=3\nproduct.DB_W2.daAmountList=594,160\nproduct.DB_W2.mb=180\nproduct.DB_W2.validityList=7,7\nproduct.DB_W2.validity_type=DAYS\n\nproduct.DB_W3.daIDList=19,203\nproduct.DB_W3.offerID=13\nproduct.DB_W3.packageName=WEEKLY_3\nproduct.DB_W3.amount=5\nproduct.DB_W3.daAmountList=989,300\nproduct.DB_W3.mb=300\nproduct.DB_W3.validityList=7,7\nproduct.DB_W3.validity_type=DAYS\n\n\n##UNLIMITED
+    BUNDLE\n\n\nproduct.DB_U1.daIDList=81\nproduct.DB_U1.offerID=112\nproduct.DB_U1.packageName=UNLIMITED_1\nproduct.DB_U1.amount=1\nproduct.DB_U1.daAmountList=0\nproduct.DB_U1.mb=0\nproduct.DB_U1.validityList=3am-5am\nproduct.DB_U1.validity_type=HOURS\n\nproduct.DB_U2.daIDList=83\nproduct.DB_U2.offerID=113\nproduct.DB_U2.packageName=UNLIMITED_2\nproduct.DB_U2.amount=2\nproduct.DB_U2.daAmountList=0\nproduct.DB_U2.mb=0\nproduct.DB_U2.validityList=12am-5am\nproduct.DB_U2.validity_type=HOURS\n\nproduct.DB_U3.daIDList=82\nproduct.DB_U3.offerID=111\nproduct.DB_U3.packageName=UNLIMITED_3\nproduct.DB_U3.amount=150\nproduct.DB_U3.daAmountList=0\nproduct.DB_U3.mb=0\nproduct.DB_U3.validityList=30\nproduct.DB_U3.validity_type=DAYS\n\n##YOUTUBE
+    BUNDLE\n\nproduct.DB_Y1.daIDList=72,202\nproduct.DB_Y1.offerID=2080\nproduct.DB_Y1.packageName=Youtube_1\nproduct.DB_Y1.amount=0.5\nproduct.DB_Y1.daAmountList=50,50\nproduct.DB_Y1.mb=50\nproduct.DB_Y1.validityList=1,1\nproduct.DB_Y1.validity_type=DAYS\n\nproduct.DB_Y2.daIDList=73,203\nproduct.DB_Y2.offerID=2080\nproduct.DB_Y2.packageName=Youtube_2\nproduct.DB_Y2.amount=3\nproduct.DB_Y2.daAmountList=300,300\nproduct.DB_Y2.mb=300\nproduct.DB_Y2.validityList=15,7\nproduct.DB_Y2.validity_type=DAYS\n\n##LIFESTYLE
+    BUNDLE\n\nproduct.DB_L1.daIDList=114,202\nproduct.DB_L1.offerID=117\nproduct.DB_L1.packageName=LifeStyle\nproduct.DB_L1.amount=5\nproduct.DB_L1.daAmountList=500,400\nproduct.DB_L1.mb=400\nproduct.DB_L1.validityList=15,7\nproduct.DB_L1.validity_type=DAYS\n\n\n#SMS
+    BUNLDE\n\nproduct.SMS_BUNDLE1.daIDList=2\nproduct.SMS_BUNDLE1.offerID=0\nproduct.SMS_BUNDLE1.packageName=GHc
+    0.50 (20 SMS)\nproduct.SMS_BUNDLE1.amount=0.5\nproduct.SMS_BUNDLE1.daAmountList=20\nproduct.SMS_BUNDLE1.mb=0\nproduct.SMS_BUNDLE1.validityList=30\nproduct.SMS_BUNDLE1.validity_type=DAYS\n\nproduct.SMS_BUNDLE2.daIDList=2\nproduct.SMS_BUNDLE2.offerID=0\nproduct.SMS_BUNDLE2.packageName=GHc
+    1 (50 SMS)\nproduct.SMS_BUNDLE2.amount=2\nproduct.SMS_BUNDLE2.daAmountList=50\nproduct.SMS_BUNDLE2.mb=0\nproduct.SMS_BUNDLE2.validityList=30\nproduct.SMS_BUNDLE2.validity_type=DAYS\n\nproduct.SMS_BUNDLE3.daIDList=2\nproduct.SMS_BUNDLE3.offerID=0\nproduct.SMS_BUNDLE3.packageName=GHc
+    2 (150 SMS)\nproduct.SMS_BUNDLE3.amount=7.5\nproduct.SMS_BUNDLE3.daAmountList=150\nproduct.SMS_BUNDLE3.mb=0\nproduct.SMS_BUNDLE3.validityList=30\nproduct.SMS_BUNDLE3.validity_type=DAYS\n\nproduct.SMS_BUNDLE4.daIDList=2\nproduct.SMS_BUNDLE4.offerID=0\nproduct.SMS_BUNDLE4.packageName=GHc
+    5 (400 SMS)\nproduct.SMS_BUNDLE4.amount=20\nproduct.SMS_BUNDLE4.daAmountList=400\nproduct.SMS_BUNDLE4.mb=0\nproduct.SMS_BUNDLE4.validityList=30\nproduct.SMS_BUNDLE4.validity_type=DAYS\n\n\n#IDD
+    BUNDLE\n\nproduct.IDD_BUNDLE1.daIDList=231\nproduct.IDD_BUNDLE1.offerID=2095\nproduct.IDD_BUNDLE1.packageName=GHS
+    2(20mins)\nproduct.IDD_BUNDLE1.amount=2\nproduct.IDD_BUNDLE1.daAmountList=20\nproduct.IDD_BUNDLE1.mb=0\nproduct.IDD_BUNDLE1.validityList=3\nproduct.IDD_BUNDLE1.validity_type=DAYS\n\nproduct.IDD_BUNDLE2.daIDList=232\nproduct.IDD_BUNDLE2.offerID=2096\nproduct.IDD_BUNDLE2.packageName=GHS
+    5(60mins)\nproduct.IDD_BUNDLE2.amount=5\nproduct.IDD_BUNDLE2.daAmountList=60\nproduct.IDD_BUNDLE2.mb=0\nproduct.IDD_BUNDLE2.validityList=7\nproduct.IDD_BUNDLE2.validity_type=DAYS\n\nproduct.IDD_BUNDLE3.daIDList=233\nproduct.IDD_BUNDLE3.offerID=2097\nproduct.IDD_BUNDLE3.packageName=GHS
+    10(120mins)\nproduct.IDD_BUNDLE3.amount=10\nproduct.IDD_BUNDLE3.daAmountList=120\nproduct.IDD_BUNDLE3.mb=0\nproduct.IDD_BUNDLE3.validityList=15\nproduct.IDD_BUNDLE3.validity_type=DAYS\n"
+kind: ConfigMap
+metadata:
+  creationTimestamp: null
+  name: uciplink-config
+  namespace: ers
